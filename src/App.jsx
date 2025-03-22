@@ -31,10 +31,10 @@ function App() {
   return (
     <>
       {/* <button onClick={createBooking}>create</button> */}
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<AirbnbUI />} />
         <Route path="/detail" element={<DetailPage />} />
-      </Routes> */}
+      </Routes>
       {/* <ApiComponent /> */}
       <Routes>
         <Route path="admin" element={<FormData />} />

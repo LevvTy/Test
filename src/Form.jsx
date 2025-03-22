@@ -73,26 +73,36 @@ const FormData = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Thêm log để kiểm tra dữ liệu
-    console.log("Data sending:", formData);
+    // Tạo data theo đúng format API mong đợi
+    const dataToSend = {
+      name: formData.name,
+      location: formData.location,
+      description: JSON.stringify(formData.description), // Convert description thành JSON string
+      images: formData.images,
+      price: formData.price,
+    };
+
+    console.log("Data sending:", dataToSend);
 
     try {
       const response = await fetch(
         "https://ngochieuwedding.io.vn/api/booking",
         {
           method: "POST",
-          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json", // Thêm header
+          },
+          body: JSON.stringify(dataToSend),
         }
       );
 
-      // Thêm log response để debug
       console.log("Response status:", response.status);
-      const responseData = await response.json();
-      console.log("Response data:", responseData);
 
       if (response.ok) {
-        const result = await response.json();
+        const responseData = await response.json();
+        console.log("Response data:", responseData);
         alert("Thêm khách sạn thành công!");
+
         // Reset form
         setFormData({
           name: "",
@@ -115,7 +125,9 @@ const FormData = () => {
           price: 0,
         });
       } else {
-        alert("Có lỗi xảy ra khi thêm khách sạn!");
+        const errorData = await response.json().catch(() => null);
+        console.error("Error response:", errorData);
+        alert(`Lỗi: ${errorData?.message || "Không thể thêm khách sạn"}`);
       }
     } catch (error) {
       console.error("Detailed error:", error);
@@ -145,17 +157,6 @@ const FormData = () => {
             type="text"
             value={formData.location}
             onChange={(e) => handleChange(e, "location")}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block mb-2">Giá (VNĐ):</label>
-          <input
-            type="number"
-            value={formData.price}
-            onChange={(e) => handleChange(e, "price")}
             className="w-full p-2 border rounded"
             required
           />
@@ -221,6 +222,16 @@ const FormData = () => {
               />
             </div>
           ))}
+        </div>
+        <div>
+          <label className="block mb-2">Giá (VNĐ):</label>
+          <input
+            type="number"
+            value={formData.price}
+            onChange={(e) => handleChange(e, "price")}
+            className="w-full p-2 border rounded"
+            required
+          />
         </div>
       </div>
 
