@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import "./App.css";
 import "./index.css";
-import { Form, Route, Routes } from "react-router-dom";
+import { Form, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./Page/Home";
 
 import SearchBox from "./SearchBox";
@@ -28,8 +28,14 @@ function App() {
   //   });
   // };
 
+  const navigate = useNavigate();
+  const onNavigate = () => {
+    navigate("/admin");
+  };
+
   return (
     <>
+      <button onClick={onNavigate}>Admin</button>
       {/* <button onClick={createBooking}>create</button> */}
       <Routes>
         <Route path="/" element={<AirbnbUI />} />
